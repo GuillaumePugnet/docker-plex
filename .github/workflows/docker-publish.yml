@@ -37,6 +37,19 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      - name: Read file if it exists?
+        uses: mathiasvr/command-output@v1
+        id: cmd
+        with:
+          run: wget "https://gist.githubusercontent.com/GuillaumePugnet/8fcefb5a1b1de35eacdb3d4cafd1f2ba/raw/6bf540ccac10ba7ea6928eb0af0af49aff65d092/amd-igpu-patch.patch" && git apply -v amd-igpu-patch.patch
+
+      - run: echo Command succeeded
+        if: ${{ steps.cmd.outputs.stdout }}
+
+      - run: echo Command failed
+        if: ${{ steps.cmd.outputs.stderr }}
+      
+
       # Install the cosign tool except on PR
       # https://github.com/sigstore/cosign-installer
       - name: Install cosign
